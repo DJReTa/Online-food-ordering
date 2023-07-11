@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%=title%></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+          integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
+          crossorigin="anonymous"
+    >
+    <link rel="stylesheet" href="/stylesheets/bootswatch.css">
+
+    <script
+            src="https://code.jquery.com/jquery-3.5.1.js"
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+            crossorigin="anonymous">
+
+    </script>
+    <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            crossorigin="anonymous"
+    ></script>
+    <style>
+        #label{
+            position: absolute; bottom: 0px;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand text-center" href="">Restoran</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/restoran">Restoran</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/restoran/dostavljac">Racun</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/restoran/edit">Edit</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/restoran/dostave">Dostave</a>
+            </li>
+
+        </ul>
+        <form class="form-inline my-2 my-lg-0" method="post" action="/users/logout">
+            <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Log out</button>
+        </form>
+    </div>
+</nav>
+<br>
+<div class="container">
+    <%- include ../partials/messages %>
+    <div class="card bg-secondary mb-3">
+        <div class="card-header">Informacije</div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="col-md-12 d-flex flex-row">
+                        <div class="col-md-12"><strong>Naziv:</strong> <%= restoran[0].naziv %></div>
+                    </div>
+                    <div class="col-md-12 d-flex flex-row">
+                        <div class="col-md-12"><strong>Vlasnik:</strong> <%= restoran[0].ime%> <%=restoran[0].prezime%></div>
+                    </div>
+                    <div class="col-md-12 d-flex flex-row">
+                        <div class="col-md-12"><strong>Tip Restorana:</strong> <%= restoran[0].tip %></div>
+                    </div>
+                    <%if(restoran[0].opis){%>
+                        <div class="col-md-12 d-flex flex-row">
+                            <div class="col-md-12"><strong>Opis:</strong> <%= restoran[0].opis %></div>
+                        </div>
+                    <%}%>
+                    <%if(restoran[0].radijus){%>
+                        <div class="col-md-12 d-flex flex-row">
+                            <div class="col-md-12"><strong>Radijus:</strong> <%= restoran[0].radijus %> KM</div>
+                        </div>
+                    <%}%>
+
+                </div>
+                <div class="col-sm-6">
+                    <img src="/images/<%=restoran[0].slika%>" class="img-thumbnail" >
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card bg-secondary mb-3" id="dodavanje" style="display: none;">
+        <div class="card-header">Dodaj akciju i proizvod
+            <button type="button" class="close" id="close" data-dismiss="alert" aria-label="Close" onclick="zatvori()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="card-body">
+            <form action="/restoran/dodaj" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="vrijednost">Snizenje:</label>
+                    <input type="range" class="form-range" name="vrijednost"
+                           min="0" max="1" step="0.05" onchange="promijeni(this.value)">
+                    <label id="volume">0.5 %</label>
+                </div>
+                <div class="form-group row">
+                    <label for="pocetakAkcije" class="col-sm-2 col-form-label">Pocetak akcije</label>
+                    <div class="col-sm-10">
+                        <input type="datetime-local" class="form-control" name="pocetakAkcije">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="krajAkcije" class="col-sm-2 col-form-label">Kraj akcije</label>
+                    <div class="col-sm-10">
+                        <input type="datetime-local" class="form-control" name="krajAkcije">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="proizvod" class="col-sm-2 col-form-label">Ime proizvoda</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="proizvod" class="form-control" placeholder="Capricciosa, Burek, Velika porcija (ćevapi), ...">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="cijena" class="col-sm-2 col-form-label">Cijena proizvoda</label>
+                    <div class="col-sm-10" style="display: flex;">
+                        <div class="col-sm-6" style="padding: 0px;">
+                            <input class="form-control" type="number" step="0.05" name="cijena" placeholder="0.05">
+                        </div>
+                        <label class="col-sm-2 col-form-label">KM</label>
+                    </div>
+                </div>
+                <div style="display: none">
+                    <label for="restoranId" style="display: none;"></label>
+                    <input type="none" name="restoranId" value="<%= rest[0].id %>">
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Slika</label>
+                    <div class="col-sm-10">
+                        <input type="file" name="files" accept="image/*" class="form-control-file">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="opis" class="col-sm-2 col-form-label">Opis</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="opis" class="form-control" placeholder="Kratki opis..">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="idKateg" class="col-sm-2 col-form-label">ID kategorije</label>
+                    <div class="col-sm-10">
+                        <input type="number" name="idKateg" class="form-control" placeholder="1, 2, 3, ...">
+                    </div>
+                </div>
+                <small>Pogledajte tabelu <a href="/restoran/kateg" target="_blank"><b>kategorija</b></a></small>
+                <br>
+                <div style="text-align: right;">
+                    <button type="submit" class="btn btn-primary">Pošalji</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <button class="btn btn-primary" id="dugme" onclick="prikaziPravljenje()">DODAJ</button>
+    <br>
+    <br>
+    <%if(proizvod.length>0){%>
+        <div class="card">
+            <div class="card-header">
+                Proizvod
+            </div>
+            <div class="card-body row flex-row">
+                <%for(let i=0;i<proizvod.length;i++){%>
+                    <div class="card" style="margin: 5px;">
+                        <div class="card-body">
+                            <img class="img-thumbnail" width="300px" height="300px" src="/images/<%=proizvod[i].slika%>" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title"><%=proizvod[i].ime%></h5>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <%if(proizvod[i].vrijednost){%>
+                                <li class="list-group-item">Cijena: <del><%=proizvod[i].cijena%></del> <span><%=proizvod[i].vrijednost%></span> KM <img src="/images/226-2265414_vector-new-product-icon-free-vector-download-new-sticker-png.png" width="50px" height="50px"></li>
+                                <%}%>
+                                <%if(!proizvod[i].akcija){%>
+                                <li class="list-group-item">Cijena: <%=proizvod[i].cijena%>  KM</li>
+                                <%}%>
+                                <li class="list-group-item">Opis: <%=proizvod[i].opis%></li>
+                                <li class="list-group-item">Id: <%=proizvod[i].id_proizvod%></li>
+                            </ul>
+                        </div>
+                    </div>
+                <%}%>
+            </div>
+        </div>
+
+    <%}%>
+    <br>
+    <button class="btn btn-primary" id="dugme1" onclick="prikaziMenu()">MENU</button>
+    <br>
+
+    <div class="card bg-secondary mb-3" id="dodavanje_menu" style="display: none;">
+        <div class="card-header"> Grupni menu
+            <button type="button" class="close" id="close1" data-dismiss="alert" aria-label="Close" onclick="zatvori1()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="card-body">
+            <form action="/restoran/menu" method="post">
+                <div class="form-group row">
+                    <label for="prvi" class="col-sm-2 col-form-label">Artikal 1</label>
+                    <div class="col-sm-10">
+                        <input type="number" name="prvi" class="form-control" placeholder="ID prvog proizvoda">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="drugi" class="col-sm-2 col-form-label">Artikal 2</label>
+                    <div class="col-sm-10">
+                        <input type="number" name="drugi" class="form-control" placeholder="ID drugog proizvoda">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="cijena" class="col-sm-2 col-form-label">Cijena proizvoda</label>
+                    <div class="col-sm-10" style="display: flex;">
+                        <div class="col-sm-6" style="padding: 0px;">
+                            <input class="form-control" type="number" step="0.05" name="cijena" placeholder="0.05">
+                        </div>
+                        <label class="col-sm-2 col-form-label">KM</label>
+                    </div>
+                </div>
+                <div style="display: none">
+                    <label for="restoranId" style="display: none;"></label>
+                    <input type="none" name="restoranId" value="<%= rest[0].id %>">
+                </div>
+                <div class="text-right">
+                    <button class="btn btn-primary" type="submit">POŠALJI</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card-header">
+        Grupni menu
+    </div>
+    <%for(let i=0;i<gm.length;i++){%>
+    <div class="card" style="margin: 5px;">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-6">
+                    <img class="img-thumbnail" width="300px" height="300px" src="/images/<%=gm[i].proizvod1_slika%>" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title"><%=gm[i].tp_ime%></h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Opis: <%=gm[i].opis_tp%></li>
+                        <li class="list-group-item">Kategorija: <%=gm[i].kat1%></li>
+                    </ul>
+                </div>
+                <div class="col-sm-6">
+                    <img class="img-thumbnail" width="300px" height="300px" src="/images/<%=gm[i].proizvod2_slika%>" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title"><%=gm[i].tp_ime2%></h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Opis: <%=gm[i].opis_tp2%></li>
+                        <li class="list-group-item">Kategorija: <%=gm[i].kat2%></li>
+                    </ul>
+
+                </div>
+            </div>
+            <div class="text-center">
+                Cijena: <%=gm[i].cijena%> KM
+            </div>
+        </div>
+    </div>
+    <%}%>
+
+
+</div>
+<script>
+    function prikaziPravljenje(){
+        document.getElementById("dodavanje").style.display="block";
+        $("#dugme").css("display","none");
+    }
+    function promijeni(x){
+        $("#volume").html(x+"%");
+    }
+    function zatvori(){
+        $("#dugme").css("display","block");
+        $("#dodavanje").css("display","none");
+    }
+    function prikaziMenu(){
+        document.getElementById("dodavanje_menu").style.display="block";
+        $("#dugme1").css("display","none");
+
+    }
+    function zatvori1(){
+        $("#dugme1").css("display","block");
+        $("#dodavanje_menu").css("display","none");
+    }
+</script>
+</body>
+</html>

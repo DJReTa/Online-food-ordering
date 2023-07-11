@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%=title%></title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+          integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="/stylesheets/bootswatch.css">
+    <script
+            src="https://code.jquery.com/jquery-3.5.1.js"
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+            crossorigin="anonymous">
+
+    </script>
+    <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            crossorigin="anonymous"
+    ></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.css' rel='stylesheet' />
+
+
+    <style>
+        .odmaknuti-div{
+            padding-top: 25px!important;
+            padding-bottom: 25px!important;
+        }
+        .odmaknuti-div-dole{
+            padding-bottom: 25px!important;
+        }
+        #div_za_edit_korisnika{
+            display: none;
+        }
+        #div_za_edit_tip_restorana{
+            display: none;
+        }
+        #div_za_edit_restorana{
+            display: none;
+        }
+        #map{
+            width: 100%;
+            height: 100%;
+        }
+        #div_za_edit_kategoriju{
+            display: none;
+        }
+
+    </style>
+
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand text-center" href="#">CRUD</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/admin">Delete</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/nastavak">Delete-Nastavak</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/edit">Edit</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/create">Create</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/narudzbe">Narudzbe</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0" method="post" action="/users/logout">
+            <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Log out</button>
+        </form>
+    </div>
+</nav>
+<div class="container">
+    <%- include ./partials/messages%>
+    <div class="row odmaknuti-div">
+        <div class="col-lg-6 col-sm-12" style="padding-left: 0px;">
+            <div class="card card-body">
+                <h1>Uloga</h1>
+                <table class="table" id="moja_tabela">
+                    <thead>
+                    <tr>
+                        <th scope="col" >#</th>
+                        <th scope="col">Ime uloge</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%for(let i=0;i<uloga.length;i++){%>
+                        <tr>
+                            <td><%=uloga[i].id%></td>
+                            <td><%=uloga[i].naziv%></td>
+                        </tr>
+
+                    <%}%>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+        <div class="col-lg-6 col-sm-12" style="padding: 0px;">
+            <div class="card card-body">
+                <h1>Tip restorana</h1>
+                <table class="table" id="moja_tabela2">
+                    <thead>
+                    <tr>
+                        <th scope="col" >ID</th>
+                        <th scope="col">Tip</th>
+                        <th scope="col">Akcija</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%for(let i=0;i<tips.length;i++){%>
+                    <tr>
+                        <td><%=tips[i].id%></td>
+                        <td><%=tips[i].tip%></td>
+                        <td><button class="btn btn-warning btn-sm" id="edit">Edit</button></td>
+                    </tr>
+                    <%}%>
+                    </tbody>
+                </table>
+                <div id="div_za_edit_tip_restorana">
+                    <button type="button" class="close" id="close1" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <form action="/admin/edit/tip" method="post">
+                        <div class="form-group">
+                            <label for="tip">Tip restorana</label>
+                            <input type="text" class="form-control" name="tip" id="tip_rest" placeholder="Tip restorana">
+                        </div>
+                        <label for="idTipa" style="display:none;"></label>
+                        <input type="hidden" name="idTipa" id="tip1">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row odmaknuti-div-dole">
+        <div class="col-12" style="padding: 0px;">
+            <div class="card card-body">
+                <h1>Korisnik</h1>
+                <table class="table" id="moja_tabela3" style="width: 100% !important; table-layout: fixed!important;" >
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Ime</th>
+                        <th scope="col">Prezime</th>
+                        <th scope="col">User</th>
+                        <th scope="col">Password</th>
+                        <th scope="col">E-mail</th>
+                        <th scope="col">ID Uloge</th>
+                        <th scope="col">ID Adrese</th>
+                        <th scope="col">Akcija</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%for(let i=0;i<korisnik.length;i++){%>
+                        <tr>
+                            <td><%=korisnik[i].id%></td>
+                            <td><%=korisnik[i].ime%></td>
+                            <td><%=korisnik[i].prezime%></td>
+                            <td><%=korisnik[i].userrname%></td>
+                            <td><%=korisnik[i].password%></td>
+                            <td><%=korisnik[i].email%></td>
+                            <td><%=korisnik[i].id_uloge%></td>
+                            <td><%=korisnik[i].id_adrese%></td>
+                            <td><button class="btn btn-warning btn-sm" id="edit">Edit</button></td>
+                        </tr>
+                    <%}%>
+                    </tbody>
+                </table>
+                <div id="div_za_edit_korisnika">
+                    <button type="button" class="close" id="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <form action="/admin/edit/korisnik" method="post">
+                        <div class="form-group">
+                            <label for="ime">Ime</label>
+                            <input type="text" class="form-control" name="ime" id="e0" placeholder="Ime">
+                        </div>
+                        <div class="form-group">
+                            <label for="prezime">Prezime</label>
+                            <input type="text" class="form-control" name="prezime" id="e1" placeholder="Prezime">
+                        </div>
+                        <div class="form-group">
+                            <label for="user">Username</label>
+                            <input type="text" class="form-control" name="user" id="e2" placeholder="Username">
+                        </div>
+                        <div class="form-group">
+                            <label for="emailKorisnika">Email address</label>
+                            <input type="email" name="emailKorisnika" class="form-control" id="e3"
+                                   aria-describedby="emailHelp" placeholder="Unesite mail">
+                        </div>
+                        <div class="form-group">
+                            <label for="passwordKorisnik">Password</label>
+                            <input type="password" class="form-control" name="passwordKorisnik" placeholder="Unesite novi password">
+                        </div>
+                        <div class="form-group">
+                            <label for="passwordKorisnik2">Password</label>
+                            <input type="password" class="form-control" name="passwordKorisnik2" placeholder="Potvrdite password">
+                        </div>
+                        <div class="form-group">
+                            <label for="idU">ID Uloge</label>
+                            <input type="number" class="form-control" name="idU" id="e4" placeholder="ID uloge">
+                        </div>
+                        <div class="form-group">
+                            <label for="idA">ID Adrese</label>
+                            <input type="number" class="form-control" name="idA" id="e5" placeholder="ID adrese">
+                            <small>Pogledajte tabele od uloge i adrese za id, u slučaju da nema unesite novu adresu u tabeli adresa.</small>
+                        </div>
+                            <label for="idKorisnika" style="display:none;"></label>
+                            <input type="hidden" name="idKorisnika" id="e6">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row odmaknuti-div-dole">
+        <div class="col-12" style="padding: 0px;">
+            <div class="card card-body">
+                <h1>Restoran</h1>
+                <table class="table" id="moja_tabela4">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Naziv</th>
+                        <th scope="col">ID Adrese</th>
+                        <th scope="col">ID Vlasnik</th>
+                        <th scope="col">ID Tip</th>
+                        <th scope="col">Akcija</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%for(let i=0;i<restoran.length;i++){%>
+                        <tr>
+                            <td><%=restoran[i].id%></td>
+                            <td><%=restoran[i].naziv%></td>
+                            <td><%=restoran[i].id_adresa%></td>
+                            <td><%=restoran[i].id_vlasnik%></td>
+                            <td><%=restoran[i].id_tip%></td>
+                            <td><button class="btn btn-warning btn-sm" id="edit">Edit</button></td>
+                        </tr>
+                    <%}%>
+                    </tbody>
+                </table>
+                <div id="div_za_edit_restorana">
+                    <button type="button" class="close" id="close2" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <form action="/admin/edit/restoran" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="naziv">Naziv restorana</label>
+                            <input type="text" class="form-control" name="naziv" id="nazivR"  placeholder="Tip restorana">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="adresa">ID Adresa</label>
+                                <input type="number" id="idAdRes" name="adresa" class="form-control" placeholder="Unesite id adrese">
+                            </div>
+                            <div class="form-group col-md-5">
+                                <label for="vlasnik">ID vlasnika</label>
+                                <input type="number"
+                                       class="form-control"
+                                       id="vlas"
+                                       name="vlasnik"
+                                       placeholder="Unesite id vlasnika"
+                                >
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="idTipRes">ID tip restorana</label>
+                                <input type="number"
+                                       class="form-control"
+                                       id="broj"
+                                       name="idTipRes"
+                                       placeholder="Unesite id tip restorana"
+                                >
+                            </div>
+                            <div class="form-group col-md-12">
+                                    <label >Izaberite Sliku</label>
+                                    <input type="file" name="files" accept="image/*">
+
+
+                            </div>
+                            <small>Pogledajte tabele od uloge,adrese,korisnika,tip restorana za id,
+                                izaberite korisnika čija je id kod uloge 2 (tj. da je admin restorana).</small>
+                        </div>
+                        <label for="idRestorana" style="display:none;"></label>
+                        <input type="hidden" name="idRestorana" id="restoran">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row odmaknuti-div">
+        <div class=" col-lg-6 col-sm-12" style="padding-left: 0px;">
+            <div class="card card-body">
+                <h1>Kategorija</h1>
+                <table class="table" id="moja_tabela5">
+                    <thead>
+                    <tr>
+                        <th scope="col" >ID</th>
+                        <th scope="col">Naziv</th>
+                        <th scope="col">Akcija</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%for(let i=0;i<kategorija.length;i++){%>
+                        <tr>
+                            <td><%=kategorija[i].id%></td>
+                            <td><%=kategorija[i].naziv%></td>
+                            <td><button class="btn btn-warning btn-sm" id="edit">Edit</button></td>
+                        </tr>
+                    <%}%>
+                    </tbody>
+                </table>
+                <div id="div_za_edit_kategoriju">
+                    <button type="button" class="close" id="close3" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <form action="/admin/edit/kategorija" method="post">
+                        <div class="form-group">
+                            <label for="kateg">Kategorija hrane</label>
+                            <input type="text" class="form-control" name="kateg" id="kateg_hrana" placeholder="Kategorija hrane">
+                        </div>
+                        <label for="idKate" style="display:none;"></label>
+                        <input type="hidden" name="idKate" id="kate">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="col-lg-6 col-sm-12" style="padding: 0px;">
+            <div class="card card-body">
+                <h1>Adresa</h1>
+                <table class="table" id="moja_tabela6">
+                    <thead>
+                    <tr>
+                        <th scope="col" >ID</th>
+                        <th scope="col">Grad</th>
+                        <th scope="col">Naziv ulice</th>
+                        <th scope="col">Latituda</th>
+                        <th scope="col">Logituda</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%for(let i=0;i<adresa.length;i++){%>
+                        <tr>
+                            <td><%=adresa[i].id%></td>
+                            <td><%=adresa[i].grad%></td>
+                            <td><%=adresa[i].naziv_ulice%></td>
+                            <td><%=adresa[i].latituda%></td>
+                            <td><%=adresa[i].longituda%></td>
+                        </tr>
+                    <%}%>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="map">
+
+</div>
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZGpyZXRhMzI1IiwiYSI6ImNrajNkZXRzODNrbnoycm40ZXAwbHM2NXIifQ.x8UnTN6P2T7ywxGcqJfQCw';
+    var map = new mapboxgl.Map({
+        container: 'map', // container id
+        style: 'mapbox://styles/mapbox/streets-v11', // style URL
+        center: [0, 0], // starting position [lng, lat]
+        zoom: 5 // starting zoom
+    });
+    var marker = new mapboxgl.Marker({
+        color: "red",
+        draggable: true,
+    }).setLngLat([0, 0])
+        .addTo(map);
+    map.on('click', function(e) {
+        let pomoc=e.lngLat.wrap();
+        console.log(pomoc);
+        var marker1 = new mapboxgl.Marker({
+            draggable: true
+        }).setLngLat([pomoc.lng,pomoc.lat]).addTo(map);
+        console.log('A click event has occurred at ' + e.lngLat+" "+e.lngLats);
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        var table = $('#moja_tabela').DataTable({
+            "paging": true,
+            "pageLength": 4
+        });
+        var table2=$('#moja_tabela2').DataTable({
+            "paging": true,
+            "pageLength": 4,
+        });
+        var table3=$('#moja_tabela3').DataTable({
+            "paging": true,
+            "pageLength": 4,
+        });
+        var table4=$('#moja_tabela4').DataTable({
+            "paging": true,
+            "pageLength": 4,
+        });
+        var tabela5=$('#moja_tabela5').DataTable({
+            "paging": true,
+            "pageLength": 4,
+
+        });
+        var table6=$('#moja_tabela6').DataTable({
+            "paging": true,
+            "pageLength": 4,
+
+        });
+
+        $('#moja_tabela3').on('click','tr #edit', function (){
+            console.log("woow");
+            document.getElementById('div_za_edit_korisnika').style.display="block";
+            var data = table3.row( $(this).parents('tr') ).data();
+            console.log(data);
+            document.getElementById("e0").value = data[1];
+            document.getElementById("e1").value = data[2];
+            document.getElementById("e2").value = data[3];
+            document.getElementById("e3").value = data[5];
+            document.getElementById("e4").value = data[6];
+            document.getElementById("e5").value = data[7];
+            document.getElementById("e6").value = data[0];
+
+        });
+        $('#close').click(function (){
+            document.getElementById('div_za_edit_korisnika').style.display="none";
+        });
+        $('#moja_tabela2').on('click','tr #edit', function (){
+            console.log("woow");
+            document.getElementById('div_za_edit_tip_restorana').style.display="block";
+            var data = table2.row( $(this).parents('tr') ).data();
+            console.log(data);
+            document.getElementById("tip_rest").value = data[1];
+            document.getElementById("tip1").value=data[0];
+        });
+        $('#close1').click(function (){
+            document.getElementById('div_za_edit_tip_restorana').style.display="none";
+        });
+        $('#moja_tabela4').on('click','tr #edit', function (){
+            console.log("woow");
+            document.getElementById('div_za_edit_restorana').style.display="block";
+            var data = table4.row( $(this).parents('tr') ).data();
+            console.log(data);
+            document.getElementById("nazivR").value = data[1];
+            document.getElementById("idAdRes").value=data[2];
+            document.getElementById("vlas").value=data[3];
+            document.getElementById("broj").value=data[4];
+            document.getElementById("restoran").value=data[0];
+        });
+        $('#close2').click(function (){
+            document.getElementById('div_za_edit_restorana').style.display="none";
+        });
+        $('#moja_tabela5').on('click','tr #edit', function (){
+            console.log("woow");
+            document.getElementById('div_za_edit_kategoriju').style.display="block";
+            var data = tabela5.row( $(this).parents('tr') ).data();
+            console.log(data);
+            document.getElementById("kate").value = data[0];
+            document.getElementById("kateg_hrana").value=data[1];
+        });
+        $('#close3').click(function (){
+            document.getElementById('div_za_edit_kategoriju').style.display="none";
+        });
+
+        $('input[type=file]').on('change', function () {
+            var $files = $(this).get(0).files;
+            console.log($files);
+
+
+
+        });
+
+
+    });
+
+</script>
+</body>
+</html>

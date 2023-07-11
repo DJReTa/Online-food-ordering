@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%=title%></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+          integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
+          crossorigin="anonymous"
+    >
+    <link rel="stylesheet" href="/stylesheets/bootswatch.css">
+
+    <script
+            src="https://code.jquery.com/jquery-3.5.1.js"
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+            crossorigin="anonymous">
+
+    </script>
+    <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            crossorigin="anonymous"
+    ></script>
+    <style>
+        #label{
+            position: absolute; bottom: 0px;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand text-center" href="">Naručite</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/home">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/narudzbe">Narudžbe</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0" method="post" action="/users/logout">
+            <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Log out</button>
+        </form>
+    </div>
+</nav>
+<br>
+<div class="container">
+    <div class="row">
+    <div class="col-sm-9">
+    <div class="card bg-secondary mb-3">
+        <div class="card-header">Informacije</div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="col-md-12 d-flex flex-row">
+                        <div class="col-md-12"><strong>Naziv:</strong> <%= restoran[0].naziv %></div>
+                    </div>
+                    <div class="col-md-12 d-flex flex-row">
+                        <div class="col-md-12"><strong>Vlasnik:</strong> <%= restoran[0].ime_korisnika%> <%=restoran[0].prezime%></div>
+                    </div>
+                    <div class="col-md-12 d-flex flex-row">
+                        <div class="col-md-12"><strong>Tip Restorana:</strong> <%= restoran[0].tip %></div>
+                    </div>
+                    <%if(restoran[0].restoran_opis){%>
+                        <div class="col-md-12 d-flex flex-row">
+                            <div class="col-md-12"><strong>Opis:</strong> <%= restoran[0].restoran_opis %></div>
+                        </div>
+                    <%}%>
+                    <%if(restoran[0].radijus){%>
+                        <div class="col-md-12 d-flex flex-row">
+                            <div class="col-md-12"><strong>Radijus:</strong> <%= restoran[0].radijus %> KM</div>
+                        </div>
+                    <%}%>
+
+                </div>
+                <div class="col-sm-6">
+                    <img src="/images/<%=restoran[0].restoran_slika%>" class="img-thumbnail" >
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            Grupni menu
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Kolicina: </label>
+                <div class="col-sm-10">
+                    <input type="number" min="1" id="kolicina3" class="form-control" value="1">
+                </div>
+            </div>
+            <div class="row">
+            <%for(let i=0;i<gm.length;i++){%>
+            <div class="card" style="margin: 5px;">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <img class="img-thumbnail" width="300px" height="300px" src="/images/<%=gm[i].proizvod1_slika%>" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title"><%=gm[i].tp_ime%></h5>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Opis: <%=gm[i].opis_tp%></li>
+                                <li class="list-group-item">Kategorija: <%=gm[i].kat1%></li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6">
+                            <img class="img-thumbnail" width="300px" height="300px" src="/images/<%=gm[i].proizvod2_slika%>" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title"><%=gm[i].tp_ime2%></h5>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Opis: <%=gm[i].opis_tp2%></li>
+                                <li class="list-group-item">Kategorija: <%=gm[i].kat2%></li>
+                            </ul>
+
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        Cijena: <%=gm[i].cijena%> KM
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-success" onclick="dodajKorpuMenu(JSON.stringify(<%=gm[i].cijena%>),JSON.stringify('<%=gm[i].tp_ime%>'),JSON.stringify(<%=gm[i].proizvod1_id%>),JSON.stringify('<%=gm[i].tp_ime2%>'),JSON.stringify(<%=gm[i].proizvod2_id%>),document.getElementById('kolicina3').value)">Dodaj</button>
+                    </div>
+                </div>
+            </div>
+            <%}%>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="card">
+        <div class="card-header">
+            Proizvod Akcija
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Kolicina: </label>
+                <div class="col-sm-10">
+                    <input type="number" min="1" id="kolicina" class="form-control" value="1">
+                </div>
+            </div>
+            <div class="row">
+            <%for(let i=0;i<restoran.length;i++){%>
+            <%if(restoran[i].vrijednost){%>
+            <div class="card" style="margin: 5px;">
+                <div class="card-body">
+                    <img class="img-thumbnail" width="300px" height="300px" src="/images/<%=restoran[i].tp_slika%>" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title"><%=restoran[i].ime%></h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <%if(restoran[i].vrijednost){%>
+                        <li class="list-group-item">Cijena: <del><%=restoran[i].cijena%></del> <span><%=restoran[i].vrijednost%></span> KM <img src="/images/226-2265414_vector-new-product-icon-free-vector-download-new-sticker-png.png" width="50px" height="50px"></li>
+                        <%}%>
+                        <li class="list-group-item">Opis: <%=restoran[i].opis%></li>
+                        <li class="list-group-item">Kategorija: <%=restoran[i].kat%></li>
+                    </ul>
+                    <br>
+                    <div class="text-center">
+                        <button class="btn btn-success" onclick="dodajKorpuAkcija(JSON.stringify(<%=restoran[i].vrijednost%>),JSON.stringify(<%=restoran[i].proizvod_id%>),JSON.stringify('<%=restoran[i].ime%>'),document.getElementById('kolicina').value) ">Dodaj</button>
+                        <div class="col-xs-2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%}%>
+            <%}%>
+        </div>
+        </div>
+    </div>
+    <br>
+    <div class="card">
+        <div class="card-header">
+            Proizvod
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Kolicina: </label>
+                <div class="col-sm-10">
+                    <input type="number" min="1" id="kolicina2" class="form-control" value="1">
+                </div>
+            </div>
+            <div class="row">
+            <%for(let i=0;i<restoran.length;i++){%>
+            <%if(!restoran[i].vrijednost){%>
+            <div class="card" style="margin: 5px;">
+                <div class="card-body">
+                    <img class="img-thumbnail" width="300px" height="300px" src="/images/<%=restoran[i].tp_slika%>" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title"><%=restoran[i].ime%></h5>
+                    </div>
+                    <ul class="list-group list-group-flush" >
+                        <li class="list-group-item">Cijena: <%=restoran[i].cijena%> KM</li>
+                        <li class="list-group-item">Opis: <%=restoran[i].opis%></li>
+                        <li class="list-group-item">Kategorija: <%=restoran[i].kat%></li>
+                        <br>
+                        <div class="text-center">
+                            <button class="btn btn-success" onclick="dodajKorpuAkcija(JSON.stringify(<%=restoran[i].cijena%>),JSON.stringify(<%=restoran[i].proizvod_id%>),JSON.stringify('<%=restoran[i].ime%>'),document.getElementById('kolicina2').value)">Dodaj</button>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+            <%}%>
+            <%}%>
+            </div>
+        </div>
+    </div>
+    </div>
+        <div class="col-sm-3">
+        <div class="card">
+            <div class="card-body">
+            <div class="row">
+                <h5>KORPA </h5>
+                <h5 style="margin-left: 5px; margin-right: 5px;" id="cijena"> 0 </h5>
+                <h5> KM </h5>
+            </div>
+            <form method="post" action="/podaci">
+                <label for="id_p" style="display: none;"></label>
+                <label for="c" style="display: none;"></label>
+                <label for="k" style="display: none;"></label>
+                <input type="hidden" name="id_p" id="id_p">
+                <input type="hidden" name="c" id="c">
+                <input type="hidden" name="k" id="k">
+            <ul id="lista_za_dodavanje" style="padding: 0">
+
+            </ul>
+                <label>Način plaćanja</label>
+                <input type="radio"  checked>
+                <label>Keš</label>
+                <br>
+                <label for="vrijeme">Izaberite vrijeme:</label>
+                <input type="time" name="vrijeme">
+                <br>
+                <br>
+                <button class="btn btn-outline-info btn-sm">Pošalji</button>
+            </form>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<script>
+    var niz=[];
+    var niz1=[];
+    var niz2=[];
+   function dodajKorpuAkcija(x,z,y,k){
+        console.log(x);
+        console.log(z);
+        console.log(y);
+        console.log(k);
+
+       let newLi = document.createElement("li");
+       newLi.style.padding="0px 0px 0px 0px";
+       let tekst=document.createTextNode(y+" "+k+"*"+x+"KM");
+       newLi.append(tekst);
+       document.getElementById("lista_za_dodavanje").append(newLi);
+
+
+       niz.push(z);
+       niz1.push(x);
+       niz2.push(k);
+
+       document.getElementById("id_p").value=niz;
+
+       document.getElementById("c").value=niz1;
+
+       document.getElementById("k").value=niz2;
+
+
+
+       console.log(document.getElementById("id_p").value);
+       console.log(document.getElementById("c").value);
+       console.log( document.getElementById("k").value)
+
+       let cijena=document.getElementById("cijena").innerHTML;
+       cijena=parseFloat(cijena)+(parseFloat(x)*parseFloat(k));
+       cijena=cijena.toFixed(2);
+       document.getElementById("cijena").innerHTML=cijena;
+
+    }
+    function dodajKorpuMenu(x,y,z,y1,z1,k){
+        let newLi = document.createElement("li");
+        newLi.style.padding="0px 0px 0px 0px";
+        let tekst=document.createTextNode(y+","+y1+" "+k+"*"+x+"KM");
+        newLi.append(tekst);
+        document.getElementById("lista_za_dodavanje").append(newLi);
+
+
+        niz.push(z);
+        niz1.push(x/2);
+        niz.push(z1);
+        niz1.push(x/2);
+        niz2.push(k);
+        niz2.push(k);
+
+        document.getElementById("id_p").value=niz;
+
+        document.getElementById("c").value=niz1;
+
+        document.getElementById("k").value=niz2;
+
+
+
+        console.log(document.getElementById("id_p").value);
+        console.log(document.getElementById("c").value);
+        console.log( document.getElementById("k").value)
+
+        let cijena=document.getElementById("cijena").innerHTML;
+        cijena=parseFloat(cijena)+(parseFloat(x)*parseFloat(k));
+        cijena=cijena.toFixed(2);
+        document.getElementById("cijena").innerHTML=cijena;
+
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%=title%></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+          integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
+          crossorigin="anonymous"
+    >
+    <link rel="stylesheet" href="/stylesheets/bootswatch.css">
+
+    <script
+            src="https://code.jquery.com/jquery-3.5.1.js"
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+            crossorigin="anonymous">
+
+    </script>
+    <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            crossorigin="anonymous"
+    ></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand text-center" href="">Restoran</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/restoran">Restoran</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/restoran/dostavljac">Racun</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/restoran/edit">Edit</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/restoran/dostave">Dostave</a>
+            </li>
+
+        </ul>
+        <form class="form-inline my-2 my-lg-0" method="post" action="/users/logout">
+            <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Log out</button>
+        </form>
+    </div>
+</nav>
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+        <div class="card card-body">
+            <h1 class="text-center mb-3">
+                <i class="fas fa-user-plus"></i> Register
+            </h1>
+            <%- include ../partials/messages %>
+            <form action="/restoran/register" method="POST">
+                <div class="form-group">
+                    <label for="name">Ime</label>
+                    <input
+                            type="name"
+                            id="name"
+                            name="name"
+                            class="form-control"
+                            placeholder="Unesite ime"
+                            value="<%= typeof name != 'undefined' ? name : '' %>"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="prezime">Prezime</label>
+                    <input
+                            type="text"
+                            id="prezime"
+                            name="prezime"
+                            class="form-control"
+                            placeholder="Unesite prezime"
+                            value="<%= typeof prezime != 'undefined' ? prezime : '' %>"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            class="form-control"
+                            placeholder="Unesite username"
+                            value="<%= typeof username != 'undefined' ? username : '' %>"
+                    />
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="Grad">Grad</label>
+                        <select id="Grad" name="Grad" class="form-control">
+                            <option value="Sarajevo">Sarajevo</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label for="Adresa">Adresa</label>
+                        <input type="text"
+                               class="form-control"
+                               id="Adresa"
+                               name="Adresa"
+                               placeholder="Unesite adresu"
+                        >
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="broj">Broj</label>
+                        <input type="number"
+                               class="form-control"
+                               id="broj"
+                               name="broj"
+                               placeholder="Unesite broj adrese"
+                        >
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            class="form-control"
+                            placeholder="Unesite e-mail"
+                            value="<%= typeof email != 'undefined' ? email : '' %>"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="form-control"
+                            placeholder="Unesite password"
+                            value="<%= typeof password != 'undefined' ? password : '' %>"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="password2">Potvrda Password-a</label>
+                    <input
+                            type="password"
+                            id="password2"
+                            name="password2"
+                            class="form-control"
+                            placeholder="Potvrdite password"
+                            value="<%= typeof password2 != 'undefined' ? password2 : '' %>"
+                    />
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                    Register
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

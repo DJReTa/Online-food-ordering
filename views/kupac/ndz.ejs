@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Narudzbe</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+          integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
+          crossorigin="anonymous"
+    >
+    <link rel="stylesheet" href="/stylesheets/bootswatch.css">
+
+    <script
+            src="https://code.jquery.com/jquery-3.5.1.js"
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+            crossorigin="anonymous">
+
+    </script>
+    <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            crossorigin="anonymous"
+    ></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand text-center" href="">Naručite</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+
+            <li class="nav-item">
+                <a class="nav-link" href="/home">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/narudzbe">Narudžbe</a>
+            </li>
+
+        </ul>
+        <form class="form-inline my-2 my-lg-0" method="post" action="/users/logout">
+            <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Log out</button>
+        </form>
+    </div>
+</nav>
+<div class="container">
+
+    <br>
+    <div class="card bg-secondary mb-3">
+        <div class="card-header"><h1>Detalji narudžbe</h1></div>
+        <div class="card-body">
+            <%for(let i=1;i<sve.length;i++){%>
+            <%if(sve[i].id_narudzbe!==sve[i-1].id_narudzbe || i-1===0){%>
+            <h5>ID narudzbe: <%=sve[i].id_narudzbe%></h5>
+            <div class="row">
+                <div class="col-sm-6">
+                    <%for(let j=0;j<sve.length;j++){%>
+                    <%if(sve[i].id_narudzbe===sve[j].id_narudzbe){%>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Ime proizvoda: <%=sve[j].proizvod%></li>
+                        <li class="list-group-item">Vrsta proizvoda: <%=sve[j].vrsta%></li>
+                        <li class="list-group-item">Opis: <%=sve[j].opis%></li>
+                        <li class="list-group-item">Cijena proizvoda: <%=sve[j].kolicina%> * <%=sve[j].cijena%> KM</li>
+                    </ul>
+                    <%}%>
+                    <%}%>
+                </div>
+                <div class="col-sm-6">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Ime dostavljača: <%=sve[i].ime_dostavljaca%> <%=sve[i].prezime_dostavljaca%></li>
+                        <li class="list-group-item">Ime restorana: <%=sve[i].naziv%></li>
+                        <%if(sve[i].aktivna===true){%>
+                            <li class="list-group-item">Stanje narudžbe: Aktivna <i class="fa fa-circle" style="color: limegreen"></i>  </li>
+                        <%}%>
+                        <%if(sve[i].aktivna===false){%>
+                            <li class="list-group-item">Stanje narudžbe: Neaktivna <i class="fa fa-circle" style="color: red"></i>  </li>
+                        <%}%>
+                        <li class="list-group-item">Datum narudžbe: <%=sve[i].datum%></li>
+                    </ul>
+                    <%if(sve[i].aktivna===false){%>
+                    <div>
+                        <form method="post" action="/kritika/<%=sve[i].id_korisnika%>/<%=sve[i].id_restorana%>">
+                            <div class="form-group">
+                                <label class="col-sm-3 col-form-label" for="opis">Opis: </label>
+                                <textarea class="form-control" name="opis" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 col-form-label" for="ocjena">Ocjena: </label>
+                                <div class="col-sm-10">
+                                <select name="ocjena" class="form-control" style="font-size: 25px;">
+                                    <option value="1" style="font-size: 25px;">
+                                        &#8902</span>
+                                    </option>
+                                    <option value="2" style="font-size: 25px;">
+                                        &#8902 &#8902</span>
+                                    </option>
+                                    <option value="3" style="font-size: 25px;">
+                                        &#8902 &#8902 &#8902</span>
+                                    </option>
+                                    <option value="4" style="font-size: 25px">
+                                        &#8902 &#8902 &#8902 &#8902</span>
+                                    </option>
+                                    <option value="5" style="font-size: 25px">
+                                        &#8902 &#8902 &#8902 &#8902 &#8902
+                                    </option>
+                                </select>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" type="submit">Pošalji kritiku</button>
+                        </form>
+                    </div>
+                    <%}%>
+                </div>
+            </div>
+            <br>
+            <%}%>
+            <%}%>
+
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

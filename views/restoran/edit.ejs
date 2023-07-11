@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%=title%></title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+          integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
+          crossorigin="anonymous"
+    >
+    <link rel="stylesheet" href="/stylesheets/bootswatch.css">
+
+    <script
+            src="https://code.jquery.com/jquery-3.5.1.js"
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+            crossorigin="anonymous">
+
+    </script>
+    <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            crossorigin="anonymous"
+    ></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    <style>
+        #div_za_edit_restorana{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand text-center" href="">Restoran</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/restoran">Restoran</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/restoran/dostavljac">Racun</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/restoran/edit">Edit</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/restoran/dostave">Dostave</a>
+            </li>
+
+        </ul>
+        <form class="form-inline my-2 my-lg-0" method="post" action="/users/logout">
+            <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Log out</button>
+        </form>
+    </div>
+</nav>
+<div class="col mt-5">
+    <div class="col-md-12 m-auto">
+        <div class="card-header">
+            <h1>Edit restoran</h1>
+        </div>
+        <div class="card card-body">
+            <%- include ../partials/messages %>
+            <form action="/restoran/update" method="POST">
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Najveća distanca (u km): </label>
+                    <div for="radijus" class="col-sm-10">
+                        <input type="number" class="form-control" name="radijus" placeholder="Npr. dostavljamo samo 10km zračne linije">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="opis">Dodaj opis</label>
+                    <textarea class="form-control" rows="3" name="opis"></textarea>
+                </div>
+                <label for="id"></label>
+                <input type="hidden" name="id" value="<%=restoran[0].id%>">
+                <button type="submit" class="btn btn-primary btn-block">
+                    Edit
+                </button>
+            </form>
+        </div>
+    </div>
+    <br>
+    <div class="col-sm-12 m-auto">
+        <div class="card card-body">
+            <h1>Proizvod</h1>
+            <table class="table" id="moja_tabela" style="table-layout: fixed!important;">
+                <thead>
+                <tr>
+                    <th scope="col" >ID</th>
+                    <th scope="col">Ime</th>
+                    <th scope="col">ID Restorana</th>
+                    <th scope="col">Cijena</th>
+                    <th scope="col">ID Kategorija</th>
+                    <th scope="col">Opis</th>
+                    <th scope="col">Akcija</th>
+                    <th scope="col">Slika</th>
+                    <th scope="col">Edit</th>
+                </tr>
+                </thead>
+                <tbody>
+                <%for(let i=0;i<proizvod.length;i++){%>
+                <tr>
+                    <td><%=proizvod[i].id_proizvod%></td>
+                    <td><%=proizvod[i].ime%></td>
+                    <td><%=proizvod[i].id_restorana%></td>
+                    <td><%=proizvod[i].cijena%></td>
+                    <td><%=proizvod[i].id_kategorije%></td>
+                    <td><%=proizvod[i].opis%></td>
+                    <td><%=proizvod[i].akcija%></td>
+                    <td><%=proizvod[i].slika%></td>
+                    <td><button class="btn btn-warning btn-sm" id="edit">Edit</button></td>
+                </tr>
+                <%}%>
+                </tbody>
+            </table>
+            <div id="div_za_edit_restorana">
+                <button type="button" class="close" id="close2" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <form action="/restoran/update/artikal" method="post" enctype="multipart/form-data">
+                    <br>
+                        <div class="form-group row">
+                            <label for="proizvod" class="col-sm-2 col-form-label">
+                                Ime proizvoda;
+                            </label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" name="proizvod" id="proizvod">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="cijena" class="col-sm-2 col-form-label">Cijena: </label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="number" name="cijena" id="cijena" step=".01"   >
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="opis" class="col-sm-2 col-form-label">Opis: </label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" name="opis" id="opis">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Slika: </label>
+                            <div class="col-sm-10">
+                                <input type="file" name="files" id="files" accept="image/*">
+                            </div>
+                        </div>
+                    <label for="idRestorana" style="display:none;"></label>
+                    <input type="hidden" name="idRestorana" id="restoran">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+<br>
+<script>
+    $(document).ready(function () {
+        var table = $('#moja_tabela').DataTable({
+            "paging": true,
+            "pageLength": 4
+        });
+
+        $('#moja_tabela').on('click','tr #edit', function (){
+            console.log("woow");
+            document.getElementById('div_za_edit_restorana').style.display="block";
+            var data = table.row( $(this).parents('tr') ).data();
+            console.log(data);
+            document.getElementById("restoran").value=data[0];
+            document.getElementById("proizvod").value=data[1];
+            document.getElementById("cijena").value=data[3];
+            document.getElementById("opis").value=data[5];
+            document.getElementById("files").value=data[7];
+
+        });
+
+        $('#close2').click(function (){
+            document.getElementById('div_za_edit_restorana').style.display="none";
+        });
+
+
+    });
+</script>
+
+
+</body>
+</html>

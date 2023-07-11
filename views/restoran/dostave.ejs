@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Odobrite narudžbe</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+          integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
+          crossorigin="anonymous"
+    >
+    <link rel="stylesheet" href="/stylesheets/bootswatch.css">
+
+    <script
+            src="https://code.jquery.com/jquery-3.5.1.js"
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+            crossorigin="anonymous">
+
+    </script>
+    <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            crossorigin="anonymous"
+    ></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    <style>
+        #div_za_edit_kategoriju{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand text-center" href="">Restoran</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/restoran">Restoran</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/restoran/dostavljac">Racun</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/restoran/edit">Edit</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/restoran/dostave">Dostave</a>
+            </li>
+
+        </ul>
+        <form class="form-inline my-2 my-lg-0" method="post" action="/users/logout">
+            <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Log out</button>
+        </form>
+    </div>
+</nav>
+<div class="container">
+        <br>
+        <div class="col-sm-12" style="padding-left: 0px;">
+            <div class="card card-body">
+                <h1>Ime dostavljača</h1>
+                <table class="table" id="moja_tabela" style="table-layout: fixed!important;">
+                    <thead>
+                    <tr>
+                        <th scope="col" >ID</th>
+                        <th scope="col">Ime</th>
+                        <th scope="col">Prezime</th>
+                        <th scope="col">E-mail</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%for(let i=0;i<dostave.length;i++){%>
+                    <tr>
+                        <td><%=dostave[i].id%></td>
+                        <td><%=dostave[i].ime%></td>
+                        <td><%=dostave[i].prezime%></td>
+                        <td><%=dostave[i].email%></td>
+                    </tr>
+
+                    <%}%>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+        <br>
+    <div class="col-sm-12" style="padding-left: 0px;">
+        <div class="card card-body">
+            <h1>Ime dostavljača</h1>
+            <table class="table" id="moja_tabela2" style="table-layout: fixed!important;">
+                <thead>
+                <tr>
+                    <th scope="col" >ID</th>
+                    <th scope="col">Datum</th>
+                    <th scope="col">id_dostavljaca</th>
+                    <th scope="col">Dodaj id</th>
+                    <th scope="col">Automatsko</th>
+                    <th scope="col">Zavrsi</th>
+                </tr>
+                </thead>
+                <tbody>
+                <%for(let i=0;i<narudzbe.length;i++){%>
+                <tr>
+                    <td><%=narudzbe[i].id%></td>
+                    <td><%=narudzbe[i].datum%></td>
+                    <td><%=narudzbe[i].id_dostavljaca%></td>
+                    <td><button class="btn btn-info btn-sm" id="edit">Dodaj</button></td>
+                    <form method="post" action="/restoran/automatski/<%=narudzbe[i].id%>">
+                        <td><button class="btn btn-success btn-sm">Automatski</button></td>
+                    </form>
+                    <form method="post" action="/restoran/zatvori/<%=narudzbe[i].id%>">
+                        <td><button class="btn btn-danger btn-sm">Zatvori</button></td>
+                    </form>
+                </tr>
+
+                <%}%>
+                </tbody>
+
+            </table>
+            <div id="div_za_edit_kategoriju">
+                <button type="button" class="close" id="close3" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <form action="/restoran/dostave" method="post">
+                    <div class="form-group">
+                        <label for="id_dostavljaca">ID Dostavljaca</label>
+                        <input type="number" min="1" value="1" name="id_dostavljaca" class="form-control" >
+                    </div>
+                        <label for="id_narudzbe" style="display: none;"></label>
+                        <input type="hidden" name="id_narudzbe" id="id_narudzbe">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var table = $('#moja_tabela').DataTable({
+            "paging": true,
+            "pageLength": 4
+        });
+
+        var table2 = $('#moja_tabela2').DataTable({
+            "paging": true,
+            "pageLength": 4
+        });
+
+        $('#moja_tabela2').on('click','tr #edit', function (){
+            console.log("woow");
+
+            $("#div_za_edit_kategoriju").css("display","block");
+
+            var data = table2.row( $(this).parents('tr') ).data();
+            console.log(data);
+            document.getElementById("id_narudzbe").value=data[0];
+
+
+        });
+
+        $('#close3').click(function (){
+            document.getElementById('div_za_edit_kategoriju').style.display="none";
+        });
+
+
+
+    });
+
+</script>
+
+</body>
+</html>

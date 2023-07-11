@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Narudzbe</title>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+          integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="/stylesheets/bootswatch.css">
+    <script
+            src="https://code.jquery.com/jquery-3.5.1.js"
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+            crossorigin="anonymous">
+
+    </script>
+    <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            crossorigin="anonymous"
+    ></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand text-center" href="#">CRUD</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/admin">Delete</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/nastavak">Delete-Nastavak</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/edit">Edit</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/create">Create</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/narudzbe">Narudzbe</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0" method="post" action="/users/logout">
+            <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Log out</button>
+        </form>
+    </div>
+</nav>
+<br>
+<div class="col-12" style="padding: 0px;">
+    <div class="card card-body">
+        <h1>Naruzdbe</h1>
+        <table class="table" id="moja_tabela" style="width: 100% !important; table-layout: fixed!important;" >
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Datum</th>
+                <th scope="col">ID Dostavljaca</th>
+                <th scope="col">Aktivna</th>
+                <th scope="col">ID Kupca</th>
+                <th scope="col">Vrijeme dostave</th>
+            </tr>
+            </thead>
+            <tbody>
+            <%for(let i=0;i<nar.length;i++){%>
+            <tr>
+                <td><%=nar[i].id%></td>
+                <td><%=nar[i].datum%></td>
+                <td><%=nar[i].id_dostavljaca%></td>
+                <td><%=nar[i].aktivna%></td>
+                <td><%=nar[i].id_kupca%></td>
+                <td><%=nar[i].vrijeme_dostave%></td>
+            </tr>
+            <%}%>
+            </tbody>
+        </table>
+    </div>
+</div>
+<br>
+<div class="col-12" style="padding: 0px;">
+    <div class="card card-body">
+        <h1>Naruzdbe-Proizvod</h1>
+        <table class="table" id="moja_tabela2" style="width: 100% !important; table-layout: fixed!important;" >
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">ID narudžbe</th>
+                <th scope="col">ID Proizvoda</th>
+                <th scope="col">Kolicina</th>
+                <th scope="col">Cijena</th>
+            </tr>
+            </thead>
+            <tbody>
+            <%for(let i=0;i<narPro.length;i++){%>
+            <tr>
+                <td><%=narPro[i].id%></td>
+                <td><%=narPro[i].id_narudzbe%></td>
+                <td><%=narPro[i].id_proizvoda%></td>
+                <td><%=narPro[i].kolicina%></td>
+                <td><%=narPro[i].cijena%></td>
+            </tr>
+
+            <%}%>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="col-12" style="padding: 0px;">
+    <div class="card card-body">
+        <h1>Proizvod</h1>
+        <table class="table" id="moja_tabela3" style="width: 100% !important; table-layout: fixed!important;" >
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Ime</th>
+                <th scope="col">ID restorana</th>
+                <th scope="col">Cijena</th>
+                <th scope="col">ID kategorije</th>
+                <th scope="col">Opis</th>
+                <th scope="col">Akcija</th>
+                <th scope="col">Slika</th>
+            </tr>
+            </thead>
+            <tbody>
+            <%for(let i=0;i<pro.length;i++){%>
+            <tr>
+                <td><%=pro[i].id_proizvoda%></td>
+                <td><%=pro[i].ime%></td>
+                <td><%=pro[i].id_restorana%></td>
+                <td><%=pro[i].cijena%></td>
+                <td><%=pro[i].id_kategorije%></td>
+                <td><%=pro[i].opis%></td>
+                <td><%=pro[i].akcija%></td>
+                <td><%=pro[i].slika%></td>
+            </tr>
+
+            <%}%>
+            </tbody>
+        </table>
+    </div>
+</div>
+<br>
+<div class="col-12" style="padding: 0px;">
+    <div class="card card-body">
+        <h1>Grupni Menu</h1>
+        <table class="table" id="moja_tabela4" style="width: 100% !important; table-layout: fixed!important;" >
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">ID proizvod1</th>
+                <th scope="col">ID proizvod2</th>
+                <th scope="col">Restoran</th>
+                <th scope="col">Cijena</th>
+            </tr>
+            </thead>
+            <tbody>
+            <%for(let i=0;i<men.length;i++){%>
+            <tr>
+            <td><%=men[i].id%></td>
+            <td><%=men[i].proizvod1%></td>
+            <td><%=men[i].proizvod2%></td>
+            <td><%=men[i].restoran%></td>
+            <td><%=men[i].cijena%></td>
+            </tr>
+            <%}%>
+            </tbody>
+        </table>
+    </div>
+</div>
+<br>
+<div class="col-sm-12">
+    <form action="/admin/narudzbe" method="post">
+        <h1>Izaberite dan dostave</h1>
+        <div class="form-group">
+            <label for="dan">Dan:</label>
+            <input type="number" name="dan" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="mjesec">Mjesec:</label>
+            <input type="number" name="mjesec" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="godina">Godina:</label>
+            <input type="number" name="godina" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="id">
+                ID dostavljača
+            </label>
+            <input type="number" class="form-control" name="id">
+        </div>
+        <button type="submit" class="btn btn-primary">Posalji</button>
+    </form>
+
+</div>
+<script>
+        $(document).ready(function () {
+        var table = $('#moja_tabela').DataTable({
+        "paging": true,
+        "pageLength": 4
+    });
+        var table2=$('#moja_tabela2').DataTable({
+        "paging": true,
+        "pageLength": 4,
+    });
+        var table3=$('#moja_tabela3').DataTable({
+        "paging": true,
+        "pageLength": 4,
+    });
+        var table4=$('#moja_tabela4').DataTable({
+        "paging": true,
+        "pageLength": 4,
+    });
+    });
+</script>
+</body>
+</html>
